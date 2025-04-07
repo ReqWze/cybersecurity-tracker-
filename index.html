@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Req Cyber Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CyberTracker">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(() => {
+        console.log("Service Worker Registered");
+      });
+    }
+  </script>
+  <style>
+    body {
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: Consolas, monospace;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 { color: #58a6ff; }
+    progress {
+      width: 80%;
+      height: 30px;
+    }
+    .secret { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Трекер обучения Req</h1>
+  <p>Следи за прогрессом изучения кибербезопасности</p>
+  <label>Прогресс:
+    <progress id="progressBar" value="0" max="84"></progress>
+  </label>
+  <p id="percentage">0%</p>
+  <script>
+    const progressBar = document.getElementById("progressBar");
+    const percent = document.getElementById("percentage");
+
+    let stored = localStorage.getItem("cyber_progress") || 0;
+    progressBar.value = stored;
+    percent.innerText = Math.round((stored / 84) * 100) + "%";
+
+    progressBar.onclick = () => {
+      stored = Math.min(parseInt(stored) + 1, 84);
+      localStorage.setItem("cyber_progress", stored);
+      progressBar.value = stored;
+      percent.innerText = Math.round((stored / 84) * 100) + "%";
+      if (stored == 84) new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3').play();
+    };
+
+    // Секретный режим
+    let sequence = '';
+    document.addEventListener("keydown", e => {
+      sequence += e.key.toLowerCase();
+      if (sequence.includes("hacktheplanet")) {
+        document.body.style.background = "#000";
+        document.body.style.color = "#0f0";
+        percent.innerText += " | Режим Хакера!";
+      }
+    });
+  </script>
+</body>
+</html>
